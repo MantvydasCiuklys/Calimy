@@ -7,25 +7,51 @@ defineProps({
 });
 </script>
 
+<script>
+export default {
+  data() {
+    return {};
+  },
+  methods: {
+    DayClicked() {
+      alert(this.day);
+    },
+  },
+};
+</script>
+
 <template>
-  <div class="calendarDay">
-    <button class="calendarDayButton">
+  <div @click="DayClicked" class="calendarItem">
+    <div class="calendarDay">
       {{ day }}
-    </button>
+    </div>
+    <div class="calendarDayInfo">INFORMATION</div>
   </div>
 </template>
 
 <style scoped>
-.calendarDayButton {
-  text-align: center;
-  width: 100%;
-  height: 100%;
-  font-size: 220%;
-}
 .calendarDay {
   border-color: black;
+  border-style: solid;
+  width: 4vh;
+  height: 4vh;
+  margin: 5% 5% 10% 5%;
+  font-size: 220%;
+  text-align: center;
+  vertical-align: middle;
+}
+.calendarDayInfo {
+  display: flex;
+  text-align: center;
+  vertical-align: middle;
+}
+.calendarItem {
+  display: grid;
+  grid-template-columns: 30% 70%;
+  border-color: red;
+  border-style: solid;
+  border-width: 1px;
   width: 90%;
-  height: 90%;
-  margin: 5% 5% 5% 5%;
+  height: 92%;
 }
 </style>
