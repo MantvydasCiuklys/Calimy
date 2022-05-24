@@ -3,9 +3,14 @@ import CalendarMain from "./components/main/calendar/CalendarMain.vue";
 import MainMenu from "./components/main/MainMenu.vue";
 </script>
 <template>
-  <h1 class="text-3xl font-bold underline">Hello world!</h1>
-  <MainMenu />
-  <CalendarMain />
+  <div class="grid grid-cols-6">
+    <div class="col-start-1 col-end-5">
+      <CalendarMain />
+    </div>
+    <div class="col-start-5 col-end-6">
+      <MainMenu />
+    </div>
+  </div>
 </template>
 
 <style>

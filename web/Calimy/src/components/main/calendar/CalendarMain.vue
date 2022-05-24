@@ -17,6 +17,7 @@ export default {
         10: new Date(new Date().getFullYear(), 11, 0).getDate(),
         11: new Date(new Date().getFullYear(), 12, 0).getDate(),
       },
+      HolidayDates: ["12-24"],
       monthNumber: new Date().getMonth(),
       monthString: this.getMonthString(new Date().getMonth()),
     };
@@ -57,7 +58,14 @@ export default {
       this.monthString = this.getMonthString(this.monthNumber);
     },
     getDaysInMonth() {
-      return this.MonthsWithDayCount[this.monthNumber];
+      if (isNaN(this.monthNumber)) {
+        this.monthNumber = new Date().getMonth();
+      }
+      return [this.MonthsWithDayCount[this.monthNumber], this.monthNumber + 1];
+    },
+    isDateHoliday(day) {
+      let formattedDate = this.monthNumber + 1 + "-" + day;
+      return this.HolidayDates.includes(formattedDate);
     },
   },
   components: { CalendarItem },
@@ -65,64 +73,70 @@ export default {
 </script>
 
 <template>
-  <div class="CalendarNavigation">
-    <div class="CalendarMonth">
-      <h1>{{ monthString }}</h1>
-    </div>
-    <div class="CalendarNavigationMenu">
+  <div class="grid grid-rows-7">
+    <div class="grid row-span-1 grid-cols-7 mb-8 mt-8 CalendarNavigation">
       <button
-        class="NavigationButton"
+        type="button"
+        class="col-start-3 col-end-4 w-9 rotate-180 text-white bg-purple opacity-70 hover:bg-purple hover:opacity-80 focus:ring-4 focus:outline-none focus:ring-purple focus:opacity-30 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center mr-2 dark:bg-purple dark:opacity-60 dark:hover:bg-purple dark:hover:opacity-60"
         @click="this.previousNavigationButtonClicked"
       >
-        Previous
+        <svg
+          class="w-4 h-4"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+            clip-rule="evenodd"
+          ></path>
+        </svg>
       </button>
+      <div class="CalendarMonth col-start-4 col-end-5 text-5xl">
+        {{ monthString }}
+      </div>
       <button
-        class="NavigationButton"
+        type="button"
+        class="col-start-6 col-end-6 w-9 text-white bg-purple opacity-70 hover:bg-purple hover:opacity-80 focus:ring-4 focus:outline-none focus:ring-purple focus:opacity-30 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center mr-2 dark:bg-purple dark:opacity-60 dark:hover:bg-purple dark:hover:opacity-60"
         @click="this.nextNavigationButtonClicked"
       >
-        Next
+        <svg
+          class="w-4 h-4"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+            clip-rule="evenodd"
+          ></path>
+        </svg>
       </button>
     </div>
-  </div>
-  <div class="Calendar">
-    <template v-for="n in getDaysInMonth()" :key="n.key">
-      <CalendarItem :day="n"></CalendarItem>
-    </template>
+    <div class="grid row-span-6 grid-cols-4 ml-8">
+      <template v-for="n in getDaysInMonth()[0]" :key="n.key">
+        <CalendarItem
+          :day="n"
+          :month="getDaysInMonth()[1]"
+          :isHoliday="isDateHoliday(n)"
+        ></CalendarItem>
+      </template>
+    </div>
   </div>
 </template>
 
 <style scoped>
-.Calendar {
-  display: grid;
-  grid-template-columns: 12% 12% 12% 12% 12%;
-  align-items: center;
-  justify-content: center;
-}
-.CalendarNavigation {
-  display: grid;
-  grid-template-rows: 50% 50%;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
+@import "../../../index.css";
 .CalendarMonth {
+  color: black;
+}
+
+.CalendarNavigation {
   align-items: center;
   justify-content: center;
   text-align: center;
-  font-size: 200%;
-}
-.NavigationButton {
-  width: 540px;
-  height: 60px;
-  margin-left: 20px;
-  margin-right: 20px;
-}
-.CalendarNavigationMenu {
-  display: grid;
-  grid-template-columns: 50% 50%;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  min-width: 100%;
+  color: white;
 }
 </style>
